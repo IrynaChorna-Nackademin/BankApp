@@ -1,0 +1,29 @@
+﻿@model BankApp.ViewModels.CustomerDetailsViewModel
+
+@{
+    ViewData["Title"] = "CustomerPicture";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<div class="card card-cascade narrower" style="margin-top: 20px">
+    <div class="mycardstyle">
+        <h1  class="white-text mx-3 text-center" style=" color: #fff !important;" >Customer</h1>
+        <form asp-controller="Cashier" asp-action="ViewCustomer" asp-route-searchId="@Model.SearchId" class="form-inline md-form ml-auto mb-4">
+            <input asp-for="SearchId" class="form-control mr-sm-2" type="search" placeholder="Enter customer ID..." aria-label="Search">
+            <button class="mybuttonstyle" type="submit" style=" color: #fff !important;"><i class="fa fa-search mt-0"></i></button>
+        </form>
+        
+    </div>
+    <div class="card-body">
+        @if (Model.CustomerId > 0)
+        {
+            <partial name="_CustomerDetailsPartialView" />
+        }
+        
+    </div>
+    <div class=" text-center" style=" color:#36b9cc">@ViewBag.Exception</div>
+</div>
+<br />
+<div>
+    <a class="nav-link" asp-controller="Home" asp-action="Index" style=" color:#36b9cc">Back to Start</a>
+</div>

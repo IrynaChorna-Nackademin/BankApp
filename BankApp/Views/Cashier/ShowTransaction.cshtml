@@ -1,0 +1,30 @@
+﻿@model BankApp.ViewModels.TransactionsViewModel
+
+@{
+    ViewData["Title"] = "ShowTransaction";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<br />
+<div class="card card-cascade narrower" style="margin-top: 20px">
+    <div class="mycardstyle">
+        <div class="text-center">
+            <h2 style="color:#fff !important;">Transaction successfully completed</h2>
+        </div>
+    </div>
+    <div class="card-body">
+        <div class="text-center">
+            <h3 style=" color:#36b9cc"> @Model.Operation </h3>
+            <hr />
+            <h4 style=" color:#36b9cc">Date: @Model.Date.ToString("dd MMM yyyy")</h4>
+            <h4 style=" color:#36b9cc">Type: @Model.Type </h4>
+            <h4 style=" color:#36b9cc">Summa: @Model.Amount </h4>
+            <h4 style=" color:#36b9cc">Current balance: @Model.Balance </h4>
+        </div>
+    </div>
+    <div class=" text-center" style=" color:#36b9cc">@ViewBag.Exception</div>
+</div>
+<br />
+<div>
+    <a class="nav-link" asp-controller="Home" asp-action="Index" style=" color:#36b9cc">Back to Start</a>
+</div>

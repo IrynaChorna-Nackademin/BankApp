@@ -1,0 +1,60 @@
+﻿@model BankApp.ViewModels.CustomerDetailsViewModel
+
+
+<div class="table-responsive">
+
+    <table class="table text-nowrap">
+        <thead>
+            <tr>
+                <th>Balance</th>
+                <th>Name</th>
+                <th>NationalId</th>
+                <th>Emailaddress</th>
+                <th>Telephonenumber</th>
+                <th>Birthday</th>
+                <th>Country</th>
+                <th>Address</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr>
+                <th scope="row">@Model.Balance</th>
+                <th>@Model.Givenname @Model.Surname</th>
+                <td>@Model.NationalId</td>
+                <td>@Model.Emailaddress</td>
+                <td>(@Model.Telephonecountrycode) @Model.Telephonenumber</td>
+                <td>@Model.Birthday.Value.ToString("dd MMM yyyy")</td>
+                <td>@Model.Country | @Model.CountryCode</td>
+                <td>@Model.Streetaddress, @Model.City, @Model.Zipcode</td>
+            </tr>
+        </tbody>
+    </table>
+    <div>
+        @foreach (var account in Model.CustomersAccounts)
+        {
+            <a asp-controller="Cashier" asp-action="ViewAccount" asp-route-accountId="@account.AccountId">
+                <div class="col-xl-3 col-md-6 mb-4">
+                    <div class="card border-left-info shadow h-100 py-2">
+                        <div class="card-body">
+                            <div class="row no-gutters align-items-center">
+                                <div class="col mr-2">
+                                    <div class="text-xs font-weight-bold text-info text-uppercase mb-1"><h6>Account</h6></div>
+                                    <div class="row no-gutters align-items-center">
+                                        <div class="col-auto">
+                                                <div class="h5 mb-0 mr-3 font-weight-bold text-gray-800">@account.AccountId</div>
+                                        </div>
+                                    </div>
+                                    <div class="text-xs font-weight-bold text-info text-uppercase mb-1">Account type: @account.Type</div>
+                                </div>
+                                <div class="col-auto">
+                                    <i class="fas fa-clipboard-list fa-2x text-gray-300"></i>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </a>
+        }
+    </div>
+</div>
+

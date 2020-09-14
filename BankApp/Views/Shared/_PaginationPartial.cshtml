@@ -1,0 +1,109 @@
+﻿@model BankApp.ViewModels.CustomerListViewModel
+
+@{
+    int p = 1;
+}
+
+
+
+<div class="dataTables_paginate paging_simple_numbers " id="dataTable_paginate">
+    <div class="row">
+        <div class="col-sm-12 col-md-3">
+            <label>
+                Show
+                <select asp-for="PagingViewModel.PageSize"
+                        asp-items="Model.PagingViewModel.PageSizeOptions"
+                        name="dataTable_length"
+                        aria-controls="dataTable"
+                        class="custom-select custom-select-sm form-control form-control-sm"
+                        id="pageSize">
+                </select>
+            </label>
+        </div>
+        <div class="col-sm-12 col-md-9">
+            <label>
+                Page
+                <ul class="pagination pagination-sm">
+                    <li class="paginate_button  page-item visible  @(!Model.PagingViewModel.ShowFirst? "disabled":"")">
+                        <a asp-controller="Cashier"
+                           asp-action="SearchCustomers"
+                           asp-route-currentpage="1"
+                           asp-route-pageSize="@Model.PagingViewModel.PageSize"
+                           asp-route-searchWord="@Model.SearchWord"
+                           class="page-link btn btn-circle btn-sm">
+                            <i class="fa fa-fast-backward"></i>
+                        </a>
+                    </li>
+
+                    <li class="paginate_button page-item visible @(!Model.PagingViewModel.ShowPrevButton ? "disabled":"")">
+                        <a asp-controller="Cashier"
+                           asp-action="SearchCustomers"
+                           asp-route-currentpage="@(Model.PagingViewModel.CurrentPage -1)"
+                           asp-route-pageSize="@Model.PagingViewModel.PageSize"
+                           asp-route-searchWord="@Model.SearchWord"
+                           class="page-link btn btn-circle btn-sm"><i class="fa fa-step-backward"></i></a>
+                    </li>
+                    @foreach (var page in Model.PagingViewModel.GetPages)
+                    {
+                        if (page == "...")
+                        {
+                            <li class="page-item disabled">...</li>
+                        }
+                        else
+                        {
+                            p = Convert.ToInt32(page);
+                            @*@for (var p = 1; p <= Model.PagingViewModel.PageCount; p++)
+                                {*@
+                            <li class="paginate_button page-item @((Model.PagingViewModel.CurrentPage == p) ? " active" : "")">
+                                <a asp-controller="Cashier"
+                                   asp-action="SearchCustomers"
+                                   asp-route-currentpage="@(p)"
+                                   asp-route-pageSize="@Model.PagingViewModel.PageSize"
+                                   asp-route-searchWord="@Model.SearchWord"
+                                   class="page-link btn btn-circle btn-sm">@p<span class="sr-only">(current)</span></a>
+                            </li>
+                        }
+                    }
+                    <li class="paginate_button page-item visible @(!Model.PagingViewModel.ShowNextButton? "disabled":"")">
+                        <a asp-controller="Cashier"
+                           asp-action="SearchCustomers"
+                           asp-route-currentpage="@(Model.PagingViewModel.CurrentPage + 1)"
+                           asp-route-pageSize="@Model.PagingViewModel.PageSize"
+                           asp-route-searchWord="@Model.SearchWord"
+                           class="page-link btn btn-circle btn-sm"><i class="fa fa-step-forward"></i></a>
+                    </li>
+
+                    <li class="paginate_button page-item visible @(!Model.PagingViewModel.ShowLast? "disabled":"")">
+                        <a asp-controller="Cashier"
+                           asp-action="SearchCustomers"
+                           asp-route-currentpage="@Model.PagingViewModel.MaxPages"
+                           asp-route-pageSize="@Model.PagingViewModel.PageSize"
+                           asp-route-searchWord="@Model.SearchWord"
+                           class="page-link btn btn-circle btn-sm"><i class="fa fa-fast-forward"></i></a>
+                    </li>
+                </ul>
+            </label>
+        </div>
+    </div>
+</div>
+
+
+<script src="~/lib/jquery/dist/jquery.min.js"></script>
+<script>
+    function updateOrAddQueryStringParameter(uri, key, value) {
+        var re = new RegExp("([?&])" + key + "=.*?(&|$)", "i");
+        var separator = uri.indexOf('?') !== -1 ? "&" : "?";
+        if (uri.match(re)) {
+            return uri.replace(re, '$1' + key + "=" + value + '$2');
+        }
+        else {
+            return uri + separator + key + "=" + value;
+        }
+    }
+    $("#pageSize").on("change", function () {
+        var newVal = $("#pageSize").val();
+        window.location.href = updateOrAddQueryStringParameter(window.location.href, 'pageSize', newVal);
+    });
+</script>
+
+    

@@ -1,0 +1,89 @@
+﻿@model BankApp.ViewModels.CustomerListViewModel
+@{
+    ViewData["Title"] = "SearchCustomers";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<div class="container-fluid">
+
+    
+    <h1 class="h3 mb-2 text-gray-800">Customers</h1>
+    <p class="mb-4">Search a customer by name or city name</p>
+    
+    <div class="card shadow mb-4">
+        <div class="card-header py-3">
+            <h6 class="m-0 font-weight-bold text-info">DataTable Customers</h6>
+        </div>
+        <div class="card-body">
+            <div class="table-responsive">
+                <div id="dataTable_wrapper" class="dataTables_wrapper dt-bootstrap4">
+                    <div class="row">
+                        <div class="col-sm-12 col-md-4">
+                            <div id="dataTable_filter" class="dataTables_filter">
+                                <form asp-controller="Cashier" asp-action="SearchCustomers" asp-route-searchWord="@Model.SearchWord" method="post">
+                                    <label> Search <input asp-for="SearchWord" type="search" class="form-control form-control-sm" placeholder="" aria-controls="dataTable"></label>
+                                </form>
+                            </div>
+                        </div>
+                        <div class="col-sm-12 col-md-8">
+                            <div class="dataTables_length" id="dataTable_length">
+                                <partial name="_PaginationPartial" />
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-sm-12">
+                            <table class="table table-bordered dataTable" id="dataTable" width="100%" cellspacing="0" role="grid" aria-describedby="dataTable_info" style="width: 100%;">
+                                <thead>
+                                    <tr>
+                                        <th scope="col">CustomerId</th>
+                                        <th scope="col">NationalId</th>
+                                        <th scope="col">Name</th>
+                                        <th scope="col">Address</th>
+                                        <th scope="col">City</th>
+                                    </tr>
+                                </thead>
+                                <tfoot>
+                                    <tr>
+                                        <th>CustomerId</th>
+                                        <th>NationalId</th>
+                                        <th>Name</th>
+                                        <th>Address</th>
+                                        <th>City</th>
+                                    </tr>
+                                </tfoot>
+                                <tbody>
+                                    @{ var i = 1; }
+                                    @foreach (var customer in Model.Customers)
+                                    {
+                                        var rowNo = (Model.PagingViewModel.CurrentPage - 1) * Model.PagingViewModel.PageSize + i;
+                                        i++;
+                                        <tr>
+                                            <td><a asp-controller="Cashier" asp-action="ViewCustomer" asp-route-searchId="@customer.CustomerId">@customer.CustomerId</a></td>
+                                            <td>@customer.NationalId</td>
+                                            <td>@customer.Surname @customer.Givenname</td>
+                                            <td>@customer.Streetaddress</td>
+                                            <td>@customer.City</td>
+                                        </tr>
+                                    }
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-sm-12 col-md-4">
+                            <div class="dataTables_info" id="dataTable_info" role="status" aria-live="polite">
+                               
+                            </div>
+                        </div>
+                        <div class="col-sm-12 col-md-8">
+                            @*<partial name="_PaginationPartial" />*@
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+

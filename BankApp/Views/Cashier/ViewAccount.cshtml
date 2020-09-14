@@ -1,0 +1,98 @@
+﻿@model BankApp.ViewModels.AccountDetailsViewModel
+
+@{
+    ViewData["Title"] = "ViewAccount";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+<script src="https://cdn.jsdelivr.net/npm/knockout@3.5.1/build/output/knockout-latest.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/knockout.mapping@2.4.3/knockout.mapping.min.js"></script>
+<br />
+<div class="card card-cascade narrower" style="margin-top: 20px">
+    <div class="mycardstyle">
+        <div class="text-center">
+            <h1 style="color:#fff !important;"> Account</h1>
+        </div>
+    </div>
+    <div class="card-body">
+        <div class="text-center">
+            <h3 style=" color:#36b9cc">Account ID: @Model.AccountId </h3>
+            <h3 style=" color:#36b9cc">Balance: @Model.AccountBalance </h3>
+        </div>
+    </div>
+</div>
+<br />
+<div class="card card-cascade narrower" style="margin-top: 20px">
+    <div class="mycardstyle">
+        <div class="text-center">
+            <h2 style="color:#fff !important;">Transactions</h2>
+        </div>
+    </div>
+    <div class="card-body">
+        <table class="table">
+            <thead>
+                <tr>
+                    <th scope="col">TransactionId</th>
+                    <th scope="col">Amount</th>
+                    <th scope="col">Balance</th>
+                    <th scope="col">Date</th>
+                    <th scope="col">Type</th>
+                    <th scope="col">Operation</th>
+                    <th scope="col">Bank</th>
+                    <th scope="col">Symbol</th>
+                </tr>
+            </thead>
+            <tbody data-bind="foreach: transactions">
+                <tr>
+                    <td data-bind="text: transactionId"></td>
+                    <td data-bind="text: amount"></td>
+                    <td data-bind="text: balance"></td>
+                    <td data-bind="text: date"></td>
+                    <td data-bind="text: type"></td>
+                    <td data-bind="text: operation"></td>
+                    <td data-bind="text: bank"></td>
+                    <td data-bind="text: symbol"></td>
+                </tr>
+            </tbody>
+        </table>
+
+    </div>
+    <div class=" text-center" style=" color:#36b9cc">@ViewBag.Exception</div>
+</div>
+<a class="btn btn-facebook btn-block" style="color:#fff; background-color:#0084b0" asp-route-accountId="@Model.AccountId" data-bind="click: fetch20more.bind($data, 'accountId')" id="knock">Show more</a>
+
+<br />
+<div>
+    <a class="nav-link" asp-controller="Home" asp-action="Index" style=" color:#36b9cc">Back to Start</a>
+</div>
+
+
+@section scripts{
+    <script>
+        var transactionsViewModel = function(data) {
+            self = this;
+            ko.mapping.fromJS(data, {}, this);
+            self.accountId = data.accountId;
+            self.skip = ko.observable(0);
+
+            self.fetch20more = function () {
+                self.skip(self.skip() + 20);
+                $.ajax({
+                    url: "/Cashier/GetFrom?accountId=" +self.accountId + "&position=" + self.skip(),
+                    success: function(result) {
+                        //result
+                        for (i = 0; i < result.length; i++)
+                            self.transactions.push(result[i]);
+                        if (result.length==0) {
+                            jQuery('#knock').hide();
+                        }
+                    }
+                });
+            }
+        }
+        var model = @Html.Raw(Json.Serialize(Model));
+        var viewModel = new transactionsViewModel(model);
+        console.log(viewModel.transactions());
+        ko.applyBindings(viewModel);
+
+    </script>
+}

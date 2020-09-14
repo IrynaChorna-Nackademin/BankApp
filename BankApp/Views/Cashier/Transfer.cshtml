@@ -1,0 +1,70 @@
+﻿@model BankApp.ViewModels.AccountDetailsViewModel
+
+@{
+    ViewData["Title"] = "Transfer";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+<br />
+<div class="card card-cascade narrower" style="margin-top: 20px">
+    <div class="mycardstyle">
+        <div class="text-center">
+            <h1 style="color:#fff !important;"> Transfer</h1>
+        </div>
+        <form asp-controller="Cashier" asp-action="Transfer" method="get" asp-route-searchAccount="@Model.SearchAccount" class="form-inline md-form ml-auto mb-4">
+            <label asp-for="SearchAccount" class="control-label">Enter an account you want to transfer to</label><br />
+            <input asp-for="SearchAccount" class="form-control mr-sm-2" type="search" placeholder="Transfer to..." aria-label="Search">
+            <button class="mybuttonstyle" type="submit" style=" color: #fff !important;"><i class="fa fa-search mt-0"></i></button>
+        </form>
+    </div>
+    <div class="card-body">
+        <div class="d-flex justify-content-around mb-3">
+            <div>
+            <h2 style=" color:#36b9cc">Transfer from</h2>
+            <h3 style=" color:#36b9cc">Account ID: @Model.AccountIdFrom </h3>
+            <h3 style=" color:#36b9cc">Balance: @Model.AccountBalanceFrom </h3>
+            </div>
+
+
+            @if (Model.AccountId != 0)
+            {
+                <div>
+                <h2 style=" color:#36b9cc">Transfer to</h2>
+                <h3 style=" color:#36b9cc">Account ID: @Model.AccountId </h3>
+                <h3 style=" color:#36b9cc">Balance:@Model.AccountBalance </h3>
+                </div>
+                }
+        </div>
+        @if (Model.AccountId != 0)
+        {
+            <hr />
+            <div class="d-flex justify-content-around mb-3">
+                <div class="col-md-4 text-center">
+                    <form asp-action="Transfer" method="post">
+                        <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+                        <input asp-for="AccountId" value="@Model.AccountId" hidden />
+                        <input asp-for="AccountBalance" value="@Model.AccountBalance" hidden />
+                        <input asp-for="AccountIdFrom" value="@Model.AccountIdFrom" hidden />
+                        <input asp-for="AccountBalanceFrom" value="@Model.AccountBalanceFrom" hidden />
+
+                        <div class="form-group">
+                            <label asp-for="Transaction.Amount" class="control-label"></label>
+                            <input asp-for="Transaction.Amount" class="form-control" />
+                            <span asp-validation-for="Transaction.Amount" class="text-danger"></span>
+                        </div>
+
+                        <div class="form-group">
+                            <input type="submit" value="Submit" class="btn btn" style="color:#fff; background-color:#0084b0" />
+                        </div>
+                    </form>
+                </div>
+            </div>
+
+        }
+        </div>
+    <div class=" text-center" style=" color:#36b9cc">@ViewBag.Exception</div>
+</div>
+<br />
+<div>
+    <a class="nav-link" asp-controller="Home" asp-action="Index" style=" color:#36b9cc">Back to Start</a>
+</div>
+
